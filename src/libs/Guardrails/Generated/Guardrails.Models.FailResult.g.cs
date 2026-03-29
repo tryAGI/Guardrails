@@ -55,11 +55,11 @@ namespace Guardrails
         /// <summary>
         /// Initializes a new instance of the <see cref="FailResult" /> class.
         /// </summary>
-        /// <param name="outcome">
-        /// Always 'fail' for FailResult.
-        /// </param>
         /// <param name="errorMessage">
         /// The error message from the validator.
+        /// </param>
+        /// <param name="outcome">
+        /// Always 'fail' for FailResult.
         /// </param>
         /// <param name="fixValue">
         /// A suggested fix value from the validator.
@@ -82,8 +82,8 @@ namespace Guardrails
             object? metadata,
             string? validatedChunk)
         {
-            this.ErrorMessage = errorMessage ?? throw new global::System.ArgumentNullException(nameof(errorMessage));
             this.Outcome = outcome;
+            this.ErrorMessage = errorMessage ?? throw new global::System.ArgumentNullException(nameof(errorMessage));
             this.FixValue = fixValue;
             this.ErrorSpans = errorSpans;
             this.Metadata = metadata;

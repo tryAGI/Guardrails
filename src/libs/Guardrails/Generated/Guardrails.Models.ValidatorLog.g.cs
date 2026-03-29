@@ -80,11 +80,11 @@ namespace Guardrails
         /// <param name="registeredName">
         /// The registry id of the validator.
         /// </param>
-        /// <param name="instanceId">
-        /// A unique identifier for the validator instance.
-        /// </param>
         /// <param name="propertyPath">
         /// The JSON path to the validated property.
+        /// </param>
+        /// <param name="instanceId">
+        /// A unique identifier for the validator instance.
         /// </param>
         /// <param name="valueBeforeValidation">
         /// The value before validation was applied.
@@ -117,8 +117,8 @@ namespace Guardrails
         {
             this.ValidatorName = validatorName ?? throw new global::System.ArgumentNullException(nameof(validatorName));
             this.RegisteredName = registeredName ?? throw new global::System.ArgumentNullException(nameof(registeredName));
-            this.PropertyPath = propertyPath ?? throw new global::System.ArgumentNullException(nameof(propertyPath));
             this.InstanceId = instanceId;
+            this.PropertyPath = propertyPath ?? throw new global::System.ArgumentNullException(nameof(propertyPath));
             this.ValueBeforeValidation = valueBeforeValidation;
             this.ValueAfterValidation = valueAfterValidation;
             this.ValidationResult = validationResult;

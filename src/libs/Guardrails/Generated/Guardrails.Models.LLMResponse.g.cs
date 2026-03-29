@@ -48,14 +48,14 @@ namespace Guardrails
         /// <summary>
         /// Initializes a new instance of the <see cref="LLMResponse" /> class.
         /// </summary>
+        /// <param name="output">
+        /// The LLM output text.
+        /// </param>
         /// <param name="promptTokenCount">
         /// Number of tokens in the prompt.
         /// </param>
         /// <param name="responseTokenCount">
         /// Number of tokens in the response.
-        /// </param>
-        /// <param name="output">
-        /// The LLM output text.
         /// </param>
         /// <param name="streamOutput">
         /// Stream output chunks.
@@ -73,9 +73,9 @@ namespace Guardrails
             global::System.Collections.Generic.IList<string>? streamOutput,
             global::System.Collections.Generic.IList<string>? asyncStreamOutput)
         {
-            this.Output = output ?? throw new global::System.ArgumentNullException(nameof(output));
             this.PromptTokenCount = promptTokenCount;
             this.ResponseTokenCount = responseTokenCount;
+            this.Output = output ?? throw new global::System.ArgumentNullException(nameof(output));
             this.StreamOutput = streamOutput;
             this.AsyncStreamOutput = asyncStreamOutput;
         }
