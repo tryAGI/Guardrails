@@ -1,6 +1,9 @@
 # Microsoft.Extensions.AI Integration
 
-The Guardrails SDK provides `AIFunction` tools that integrate with any `IChatClient` through the Microsoft.Extensions.AI (MEAI) abstractions.
+!!! tip "Cross-SDK comparison"
+    See the [centralized MEAI documentation](https://tryagi.github.io/docs/meai/) for feature matrices and comparisons across all tryAGI SDKs.
+
+The Guardrails SDK provides `AIFunction` tool wrappers compatible with [Microsoft.Extensions.AI](https://learn.microsoft.com/en-us/dotnet/ai/microsoft-extensions-ai). These tools can be used with any `IChatClient` to give AI models LLM output validation, hallucination detection, and PII protection capabilities.
 
 ## Available Tools
 
