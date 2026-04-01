@@ -250,6 +250,7 @@ namespace Guardrails
             double? temperature = default,
             global::System.Threading.CancellationToken cancellationToken = default)
         {
+
             var __request = new global::Guardrails.OpenAIChatCompletionPayload
             {
                 Model = model,
