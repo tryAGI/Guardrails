@@ -5,6 +5,25 @@ namespace Guardrails
 {
     public partial class GuardClient
     {
+
+
+        private static readonly global::Guardrails.EndPointSecurityRequirement s_UpdateGuardSecurityRequirement0 =
+            new global::Guardrails.EndPointSecurityRequirement
+            {
+                Authorizations = new global::Guardrails.EndPointAuthorizationRequirement[]
+                {                    new global::Guardrails.EndPointAuthorizationRequirement
+                    {
+                        Type = "Http",
+                        Location = "Header",
+                        Name = "Bearer",
+                        FriendlyName = "Bearer",
+                    },
+                },
+            };
+        private static readonly global::Guardrails.EndPointSecurityRequirement[] s_UpdateGuardSecurityRequirements =
+            new global::Guardrails.EndPointSecurityRequirement[]
+            {                s_UpdateGuardSecurityRequirement0,
+            };
         partial void PrepareUpdateGuardArguments(
             global::System.Net.Http.HttpClient httpClient,
             ref string guardName,
@@ -45,9 +64,15 @@ namespace Guardrails
                 guardName: ref guardName,
                 request: request);
 
+
+            var __authorizations = global::Guardrails.EndPointSecurityResolver.ResolveAuthorizations(
+                availableAuthorizations: Authorizations,
+                securityRequirements: s_UpdateGuardSecurityRequirements,
+                operationName: "UpdateGuardAsync");
+
             var __pathBuilder = new global::Guardrails.PathBuilder(
                 path: $"/guards/{guardName}",
-                baseUri: HttpClient.BaseAddress); 
+                baseUri: HttpClient.BaseAddress);
             var __path = __pathBuilder.ToString();
             using var __httpRequest = new global::System.Net.Http.HttpRequestMessage(
                 method: global::System.Net.Http.HttpMethod.Put,
@@ -57,7 +82,7 @@ namespace Guardrails
             __httpRequest.VersionPolicy = global::System.Net.Http.HttpVersionPolicy.RequestVersionOrHigher;
 #endif
 
-            foreach (var __authorization in Authorizations)
+            foreach (var __authorization in __authorizations)
             {
                 if (__authorization.Type == "Http" ||
                     __authorization.Type == "OAuth2")

@@ -6,6 +6,7 @@ namespace Guardrails
     public sealed partial class GuardrailsClient
     {
         /// <inheritdoc cref="GuardrailsClient(global::System.Net.Http.HttpClient?, global::System.Uri?, global::System.Collections.Generic.List{global::Guardrails.EndPointAuthorization}?, bool)"/>
+
         public GuardrailsClient(
             string apiKey,
             global::System.Net.Http.HttpClient? httpClient = null,
