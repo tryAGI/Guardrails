@@ -5,6 +5,25 @@ namespace Guardrails
 {
     public partial class ValidateClient
     {
+
+
+        private static readonly global::Guardrails.EndPointSecurityRequirement s_ValidateSecurityRequirement0 =
+            new global::Guardrails.EndPointSecurityRequirement
+            {
+                Authorizations = new global::Guardrails.EndPointAuthorizationRequirement[]
+                {                    new global::Guardrails.EndPointAuthorizationRequirement
+                    {
+                        Type = "Http",
+                        Location = "Header",
+                        Name = "Bearer",
+                        FriendlyName = "Bearer",
+                    },
+                },
+            };
+        private static readonly global::Guardrails.EndPointSecurityRequirement[] s_ValidateSecurityRequirements =
+            new global::Guardrails.EndPointSecurityRequirement[]
+            {                s_ValidateSecurityRequirement0,
+            };
         partial void PrepareValidateArguments(
             global::System.Net.Http.HttpClient httpClient,
             ref string guardName,
@@ -50,9 +69,15 @@ namespace Guardrails
                 xOpenaiApiKey: ref xOpenaiApiKey,
                 request: request);
 
+
+            var __authorizations = global::Guardrails.EndPointSecurityResolver.ResolveAuthorizations(
+                availableAuthorizations: Authorizations,
+                securityRequirements: s_ValidateSecurityRequirements,
+                operationName: "ValidateAsync");
+
             var __pathBuilder = new global::Guardrails.PathBuilder(
                 path: $"/guards/{guardName}/validate",
-                baseUri: HttpClient.BaseAddress); 
+                baseUri: HttpClient.BaseAddress);
             var __path = __pathBuilder.ToString();
             using var __httpRequest = new global::System.Net.Http.HttpRequestMessage(
                 method: global::System.Net.Http.HttpMethod.Post,
@@ -62,7 +87,7 @@ namespace Guardrails
             __httpRequest.VersionPolicy = global::System.Net.Http.HttpVersionPolicy.RequestVersionOrHigher;
 #endif
 
-            foreach (var __authorization in Authorizations)
+            foreach (var __authorization in __authorizations)
             {
                 if (__authorization.Type == "Http" ||
                     __authorization.Type == "OAuth2")

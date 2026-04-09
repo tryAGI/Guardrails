@@ -5,6 +5,25 @@ namespace Guardrails
 {
     public partial class GuardClient
     {
+
+
+        private static readonly global::Guardrails.EndPointSecurityRequirement s_GetGuardSecurityRequirement0 =
+            new global::Guardrails.EndPointSecurityRequirement
+            {
+                Authorizations = new global::Guardrails.EndPointAuthorizationRequirement[]
+                {                    new global::Guardrails.EndPointAuthorizationRequirement
+                    {
+                        Type = "Http",
+                        Location = "Header",
+                        Name = "Bearer",
+                        FriendlyName = "Bearer",
+                    },
+                },
+            };
+        private static readonly global::Guardrails.EndPointSecurityRequirement[] s_GetGuardSecurityRequirements =
+            new global::Guardrails.EndPointSecurityRequirement[]
+            {                s_GetGuardSecurityRequirement0,
+            };
         partial void PrepareGetGuardArguments(
             global::System.Net.Http.HttpClient httpClient,
             ref string guardName,
@@ -42,12 +61,18 @@ namespace Guardrails
                 guardName: ref guardName,
                 asOf: ref asOf);
 
+
+            var __authorizations = global::Guardrails.EndPointSecurityResolver.ResolveAuthorizations(
+                availableAuthorizations: Authorizations,
+                securityRequirements: s_GetGuardSecurityRequirements,
+                operationName: "GetGuardAsync");
+
             var __pathBuilder = new global::Guardrails.PathBuilder(
                 path: $"/guards/{guardName}",
                 baseUri: HttpClient.BaseAddress); 
             __pathBuilder
                 .AddOptionalParameter("asOf", asOf?.ToString("yyyy-MM-ddTHH:mm:ssZ")) 
-                ; 
+                ;
             var __path = __pathBuilder.ToString();
             using var __httpRequest = new global::System.Net.Http.HttpRequestMessage(
                 method: global::System.Net.Http.HttpMethod.Get,
@@ -57,7 +82,7 @@ namespace Guardrails
             __httpRequest.VersionPolicy = global::System.Net.Http.HttpVersionPolicy.RequestVersionOrHigher;
 #endif
 
-            foreach (var __authorization in Authorizations)
+            foreach (var __authorization in __authorizations)
             {
                 if (__authorization.Type == "Http" ||
                     __authorization.Type == "OAuth2")
