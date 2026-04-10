@@ -10,6 +10,7 @@ namespace Guardrails
         /// <param name="guardName"></param>
         /// <param name="xOpenaiApiKey"></param>
         /// <param name="request"></param>
+        /// <param name="requestOptions">Per-request overrides such as headers, query parameters, timeout, retries, and response buffering.</param>
         /// <param name="cancellationToken">The token to cancel the operation with</param>
         /// <exception cref="global::Guardrails.ApiException"></exception>
         global::System.Threading.Tasks.Task<global::Guardrails.ValidationOutcome> ValidateAsync(
@@ -17,6 +18,7 @@ namespace Guardrails
 
             global::Guardrails.ValidatePayload request,
             string? xOpenaiApiKey = default,
+            global::Guardrails.AutoSDKRequestOptions? requestOptions = default,
             global::System.Threading.CancellationToken cancellationToken = default);
         /// <summary>
         /// Runs the validations specified in a Guard
@@ -36,6 +38,7 @@ namespace Guardrails
         /// <param name="llmApi">
         /// The LLM API to use for validation
         /// </param>
+        /// <param name="requestOptions">Per-request overrides such as headers, query parameters, timeout, retries, and response buffering.</param>
         /// <param name="cancellationToken">The token to cancel the operation with</param>
         /// <exception cref="global::System.InvalidOperationException"></exception>
         global::System.Threading.Tasks.Task<global::Guardrails.ValidationOutcome> ValidateAsync(
@@ -45,6 +48,7 @@ namespace Guardrails
             int? numReasks = default,
             object? promptParams = default,
             global::Guardrails.ValidatePayloadLlmApi? llmApi = default,
+            global::Guardrails.AutoSDKRequestOptions? requestOptions = default,
             global::System.Threading.CancellationToken cancellationToken = default);
     }
 }
