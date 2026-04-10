@@ -14,6 +14,7 @@ namespace Guardrails
                 {                    new global::Guardrails.EndPointAuthorizationRequirement
                     {
                         Type = "Http",
+                        SchemeId = "BearerAuth",
                         Location = "Header",
                         Name = "Bearer",
                         FriendlyName = "Bearer",
@@ -47,12 +48,14 @@ namespace Guardrails
         /// </summary>
         /// <param name="guardName"></param>
         /// <param name="request"></param>
+        /// <param name="requestOptions">Per-request overrides such as headers, query parameters, timeout, retries, and response buffering.</param>
         /// <param name="cancellationToken">The token to cancel the operation with</param>
         /// <exception cref="global::Guardrails.ApiException"></exception>
         public async global::System.Threading.Tasks.Task<global::Guardrails.OpenAIChatCompletion> OpenaiChatCompletionAsync(
             string guardName,
 
             global::Guardrails.OpenAIChatCompletionPayload request,
+            global::Guardrails.AutoSDKRequestOptions? requestOptions = default,
             global::System.Threading.CancellationToken cancellationToken = default)
         {
             request = request ?? throw new global::System.ArgumentNullException(nameof(request));
@@ -70,22 +73,43 @@ namespace Guardrails
                 securityRequirements: s_OpenaiChatCompletionSecurityRequirements,
                 operationName: "OpenaiChatCompletionAsync");
 
-            var __pathBuilder = new global::Guardrails.PathBuilder(
-                path: $"/guards/{guardName}/openai/v1/chat/completions",
-                baseUri: HttpClient.BaseAddress);
-            var __path = __pathBuilder.ToString();
-            using var __httpRequest = new global::System.Net.Http.HttpRequestMessage(
-                method: global::System.Net.Http.HttpMethod.Post,
-                requestUri: new global::System.Uri(__path, global::System.UriKind.RelativeOrAbsolute));
+            using var __timeoutCancellationTokenSource = global::Guardrails.AutoSDKRequestOptionsSupport.CreateTimeoutCancellationTokenSource(
+                clientOptions: Options,
+                requestOptions: requestOptions,
+                cancellationToken: cancellationToken);
+            var __effectiveCancellationToken = __timeoutCancellationTokenSource?.Token ?? cancellationToken;
+            var __effectiveReadResponseAsString = global::Guardrails.AutoSDKRequestOptionsSupport.GetReadResponseAsString(
+                clientOptions: Options,
+                requestOptions: requestOptions,
+                fallbackValue: ReadResponseAsString);
+            var __maxAttempts = global::Guardrails.AutoSDKRequestOptionsSupport.GetMaxAttempts(
+                clientOptions: Options,
+                requestOptions: requestOptions,
+                supportsRetry: true);
+
+            global::System.Net.Http.HttpRequestMessage __CreateHttpRequest()
+            {
+                            var __pathBuilder = new global::Guardrails.PathBuilder(
+                                path: $"/guards/{guardName}/openai/v1/chat/completions",
+                                baseUri: HttpClient.BaseAddress);
+                            var __path = __pathBuilder.ToString();
+                __path = global::Guardrails.AutoSDKRequestOptionsSupport.AppendQueryParameters(
+                    path: __path,
+                    clientParameters: Options.QueryParameters,
+                    requestParameters: requestOptions?.QueryParameters);
+                var __httpRequest = new global::System.Net.Http.HttpRequestMessage(
+                    method: global::System.Net.Http.HttpMethod.Post,
+                    requestUri: new global::System.Uri(__path, global::System.UriKind.RelativeOrAbsolute));
 #if NET6_0_OR_GREATER
-            __httpRequest.Version = global::System.Net.HttpVersion.Version11;
-            __httpRequest.VersionPolicy = global::System.Net.Http.HttpVersionPolicy.RequestVersionOrHigher;
+                __httpRequest.Version = global::System.Net.HttpVersion.Version11;
+                __httpRequest.VersionPolicy = global::System.Net.Http.HttpVersionPolicy.RequestVersionOrHigher;
 #endif
 
             foreach (var __authorization in __authorizations)
             {
                 if (__authorization.Type == "Http" ||
-                    __authorization.Type == "OAuth2")
+                    __authorization.Type == "OAuth2" ||
+                    __authorization.Type == "OpenIdConnect")
                 {
                     __httpRequest.Headers.Authorization = new global::System.Net.Http.Headers.AuthenticationHeaderValue(
                         scheme: __authorization.Name,
@@ -95,156 +119,315 @@ namespace Guardrails
                          __authorization.Location == "Header")
                 {
                     __httpRequest.Headers.Add(__authorization.Name, __authorization.Value);
-                }
+                } 
             }
-            var __httpRequestContentBody = request.ToJson(JsonSerializerContext);
-            var __httpRequestContent = new global::System.Net.Http.StringContent(
-                content: __httpRequestContentBody,
-                encoding: global::System.Text.Encoding.UTF8,
-                mediaType: "application/json");
-            __httpRequest.Content = __httpRequestContent;
+                            var __httpRequestContentBody = request.ToJson(JsonSerializerContext);
+                            var __httpRequestContent = new global::System.Net.Http.StringContent(
+                                content: __httpRequestContentBody,
+                                encoding: global::System.Text.Encoding.UTF8,
+                                mediaType: "application/json");
+                            __httpRequest.Content = __httpRequestContent;
+                global::Guardrails.AutoSDKRequestOptionsSupport.ApplyHeaders(
+                    request: __httpRequest,
+                    clientHeaders: Options.Headers,
+                    requestHeaders: requestOptions?.Headers);
 
-            PrepareRequest(
-                client: HttpClient,
-                request: __httpRequest);
-            PrepareOpenaiChatCompletionRequest(
-                httpClient: HttpClient,
-                httpRequestMessage: __httpRequest,
-                guardName: guardName,
-                request: request);
-
-            using var __response = await HttpClient.SendAsync(
-                request: __httpRequest,
-                completionOption: global::System.Net.Http.HttpCompletionOption.ResponseContentRead,
-                cancellationToken: cancellationToken).ConfigureAwait(false);
-
-            ProcessResponse(
-                client: HttpClient,
-                response: __response);
-            ProcessOpenaiChatCompletionResponse(
-                httpClient: HttpClient,
-                httpResponseMessage: __response);
-            // Unexpected error
-            if (!__response.IsSuccessStatusCode)
-            {
-                string? __content_default = null;
-                global::System.Exception? __exception_default = null;
-                global::Guardrails.HttpError? __value_default = null;
-                try
-                {
-                    if (ReadResponseAsString)
-                    {
-                        __content_default = await __response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
-                        __value_default = global::Guardrails.HttpError.FromJson(__content_default, JsonSerializerContext);
-                    }
-                    else
-                    {
-                        __content_default = await __response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
-
-                        __value_default = global::Guardrails.HttpError.FromJson(__content_default, JsonSerializerContext);
-                    }
-                }
-                catch (global::System.Exception __ex)
-                {
-                    __exception_default = __ex;
-                }
-
-                throw new global::Guardrails.ApiException<global::Guardrails.HttpError>(
-                    message: __content_default ?? __response.ReasonPhrase ?? string.Empty,
-                    innerException: __exception_default,
-                    statusCode: __response.StatusCode)
-                {
-                    ResponseBody = __content_default,
-                    ResponseObject = __value_default,
-                    ResponseHeaders = global::System.Linq.Enumerable.ToDictionary(
-                        __response.Headers,
-                        h => h.Key,
-                        h => h.Value),
-                };
-            }
-
-            if (ReadResponseAsString)
-            {
-                var __content = await __response.Content.ReadAsStringAsync(
-#if NET5_0_OR_GREATER
-                    cancellationToken
-#endif
-                ).ConfigureAwait(false);
-
-                ProcessResponseContent(
+                PrepareRequest(
                     client: HttpClient,
-                    response: __response,
-                    content: ref __content);
-                ProcessOpenaiChatCompletionResponseContent(
+                    request: __httpRequest);
+                PrepareOpenaiChatCompletionRequest(
                     httpClient: HttpClient,
-                    httpResponseMessage: __response,
-                    content: ref __content);
+                    httpRequestMessage: __httpRequest,
+                    guardName: guardName,
+                    request: request);
 
-                try
-                {
-                    __response.EnsureSuccessStatusCode();
-
-                    return
-                        global::Guardrails.OpenAIChatCompletion.FromJson(__content, JsonSerializerContext) ??
-                        throw new global::System.InvalidOperationException($"Response deserialization failed for \"{__content}\" ");
-                }
-                catch (global::System.Exception __ex)
-                {
-                    throw new global::Guardrails.ApiException(
-                        message: __content ?? __response.ReasonPhrase ?? string.Empty,
-                        innerException: __ex,
-                        statusCode: __response.StatusCode)
-                    {
-                        ResponseBody = __content,
-                        ResponseHeaders = global::System.Linq.Enumerable.ToDictionary(
-                            __response.Headers,
-                            h => h.Key,
-                            h => h.Value),
-                    };
-                }
+                return __httpRequest;
             }
-            else
-            {
-                try
-                {
-                    __response.EnsureSuccessStatusCode();
-                    using var __content = await __response.Content.ReadAsStreamAsync(
-#if NET5_0_OR_GREATER
-                        cancellationToken
-#endif
-                    ).ConfigureAwait(false);
 
-                    return
-                        await global::Guardrails.OpenAIChatCompletion.FromJsonStreamAsync(__content, JsonSerializerContext).ConfigureAwait(false) ??
-                        throw new global::System.InvalidOperationException("Response deserialization failed.");
-                }
-                catch (global::System.Exception __ex)
+            global::System.Net.Http.HttpRequestMessage? __httpRequest = null;
+            global::System.Net.Http.HttpResponseMessage? __response = null;
+            var __attemptNumber = 0;
+            try
+            {
+                for (var __attempt = 1; __attempt <= __maxAttempts; __attempt++)
                 {
-                    string? __content = null;
+                    __attemptNumber = __attempt;
+                    __httpRequest = __CreateHttpRequest();
+                    await global::Guardrails.AutoSDKRequestOptionsSupport.OnBeforeRequestAsync(
+                            clientOptions: Options,
+                            context: global::Guardrails.AutoSDKRequestOptionsSupport.CreateHookContext(
+                                operationId: "OpenaiChatCompletion",
+                                methodName: "OpenaiChatCompletionAsync",
+                                pathTemplate: "$\"/guards/{guardName}/openai/v1/chat/completions\"",
+                                httpMethod: "POST",
+                                baseUri: BaseUri,
+                                request: __httpRequest!,
+                                response: null,
+                                exception: null,
+                                clientOptions: Options,
+                                requestOptions: requestOptions,
+                                attempt: __attempt,
+                                maxAttempts: __maxAttempts,
+                                willRetry: false,
+                                cancellationToken: __effectiveCancellationToken)).ConfigureAwait(false);
                     try
                     {
-                        __content = await __response.Content.ReadAsStringAsync(
-#if NET5_0_OR_GREATER
-                            cancellationToken
-#endif
-                        ).ConfigureAwait(false);
+                        __response = await HttpClient.SendAsync(
+                request: __httpRequest,
+                completionOption: global::System.Net.Http.HttpCompletionOption.ResponseContentRead,
+                cancellationToken: __effectiveCancellationToken).ConfigureAwait(false);
                     }
-                    catch (global::System.Exception)
+                    catch (global::System.Net.Http.HttpRequestException __exception)
                     {
+                        var __willRetry = __attempt < __maxAttempts && !__effectiveCancellationToken.IsCancellationRequested;
+                        await global::Guardrails.AutoSDKRequestOptionsSupport.OnAfterErrorAsync(
+                            clientOptions: Options,
+                            context: global::Guardrails.AutoSDKRequestOptionsSupport.CreateHookContext(
+                                operationId: "OpenaiChatCompletion",
+                                methodName: "OpenaiChatCompletionAsync",
+                                pathTemplate: "$\"/guards/{guardName}/openai/v1/chat/completions\"",
+                                httpMethod: "POST",
+                                baseUri: BaseUri,
+                                request: __httpRequest!,
+                                response: null,
+                                exception: __exception,
+                                clientOptions: Options,
+                                requestOptions: requestOptions,
+                                attempt: __attempt,
+                                maxAttempts: __maxAttempts,
+                                willRetry: __willRetry,
+                                cancellationToken: __effectiveCancellationToken)).ConfigureAwait(false);
+                        if (!__willRetry)
+                        {
+                            throw;
+                        }
+
+                        __httpRequest.Dispose();
+                        __httpRequest = null;
+                        await global::Guardrails.AutoSDKRequestOptionsSupport.DelayBeforeRetryAsync(
+                            clientOptions: Options,
+                            requestOptions: requestOptions,
+                            cancellationToken: __effectiveCancellationToken).ConfigureAwait(false);
+                        continue;
                     }
 
-                    throw new global::Guardrails.ApiException(
-                        message: __content ?? __response.ReasonPhrase ?? string.Empty,
-                        innerException: __ex,
-                        statusCode: __response.StatusCode)
+                    if (__response != null &&
+                        __attempt < __maxAttempts &&
+                        global::Guardrails.AutoSDKRequestOptionsSupport.ShouldRetryStatusCode(__response.StatusCode))
                     {
-                        ResponseBody = __content,
-                        ResponseHeaders = global::System.Linq.Enumerable.ToDictionary(
-                            __response.Headers,
-                            h => h.Key,
-                            h => h.Value),
-                    };
+                        await global::Guardrails.AutoSDKRequestOptionsSupport.OnAfterErrorAsync(
+                            clientOptions: Options,
+                            context: global::Guardrails.AutoSDKRequestOptionsSupport.CreateHookContext(
+                                operationId: "OpenaiChatCompletion",
+                                methodName: "OpenaiChatCompletionAsync",
+                                pathTemplate: "$\"/guards/{guardName}/openai/v1/chat/completions\"",
+                                httpMethod: "POST",
+                                baseUri: BaseUri,
+                                request: __httpRequest!,
+                                response: __response,
+                                exception: null,
+                                clientOptions: Options,
+                                requestOptions: requestOptions,
+                                attempt: __attempt,
+                                maxAttempts: __maxAttempts,
+                                willRetry: true,
+                                cancellationToken: __effectiveCancellationToken)).ConfigureAwait(false);
+                        __response.Dispose();
+                        __response = null;
+                        __httpRequest.Dispose();
+                        __httpRequest = null;
+                        await global::Guardrails.AutoSDKRequestOptionsSupport.DelayBeforeRetryAsync(
+                            clientOptions: Options,
+                            requestOptions: requestOptions,
+                            cancellationToken: __effectiveCancellationToken).ConfigureAwait(false);
+                        continue;
+                    }
+
+                    break;
                 }
+
+                if (__response == null)
+                {
+                    throw new global::System.InvalidOperationException("No response received.");
+                }
+
+                using (__response)
+                {
+
+                ProcessResponse(
+                    client: HttpClient,
+                    response: __response);
+                ProcessOpenaiChatCompletionResponse(
+                    httpClient: HttpClient,
+                    httpResponseMessage: __response);
+                if (__response.IsSuccessStatusCode)
+                {
+                    await global::Guardrails.AutoSDKRequestOptionsSupport.OnAfterSuccessAsync(
+                            clientOptions: Options,
+                            context: global::Guardrails.AutoSDKRequestOptionsSupport.CreateHookContext(
+                                operationId: "OpenaiChatCompletion",
+                                methodName: "OpenaiChatCompletionAsync",
+                                pathTemplate: "$\"/guards/{guardName}/openai/v1/chat/completions\"",
+                                httpMethod: "POST",
+                                baseUri: BaseUri,
+                                request: __httpRequest!,
+                                response: __response,
+                                exception: null,
+                                clientOptions: Options,
+                                requestOptions: requestOptions,
+                                attempt: __attemptNumber,
+                                maxAttempts: __maxAttempts,
+                                willRetry: false,
+                                cancellationToken: __effectiveCancellationToken)).ConfigureAwait(false);
+                }
+                else
+                {
+                    await global::Guardrails.AutoSDKRequestOptionsSupport.OnAfterErrorAsync(
+                            clientOptions: Options,
+                            context: global::Guardrails.AutoSDKRequestOptionsSupport.CreateHookContext(
+                                operationId: "OpenaiChatCompletion",
+                                methodName: "OpenaiChatCompletionAsync",
+                                pathTemplate: "$\"/guards/{guardName}/openai/v1/chat/completions\"",
+                                httpMethod: "POST",
+                                baseUri: BaseUri,
+                                request: __httpRequest!,
+                                response: __response,
+                                exception: null,
+                                clientOptions: Options,
+                                requestOptions: requestOptions,
+                                attempt: __attemptNumber,
+                                maxAttempts: __maxAttempts,
+                                willRetry: false,
+                                cancellationToken: __effectiveCancellationToken)).ConfigureAwait(false);
+                }
+                            // Unexpected error
+                            if (!__response.IsSuccessStatusCode)
+                            {
+                                string? __content_default = null;
+                                global::System.Exception? __exception_default = null;
+                                global::Guardrails.HttpError? __value_default = null;
+                                try
+                                {
+                                    if (__effectiveReadResponseAsString)
+                                    {
+                                        __content_default = await __response.Content.ReadAsStringAsync(__effectiveCancellationToken).ConfigureAwait(false);
+                                        __value_default = global::Guardrails.HttpError.FromJson(__content_default, JsonSerializerContext);
+                                    }
+                                    else
+                                    {
+                                        __content_default = await __response.Content.ReadAsStringAsync(__effectiveCancellationToken).ConfigureAwait(false);
+
+                                        __value_default = global::Guardrails.HttpError.FromJson(__content_default, JsonSerializerContext);
+                                    }
+                                }
+                                catch (global::System.Exception __ex)
+                                {
+                                    __exception_default = __ex;
+                                }
+
+                                throw new global::Guardrails.ApiException<global::Guardrails.HttpError>(
+                                    message: __content_default ?? __response.ReasonPhrase ?? string.Empty,
+                                    innerException: __exception_default,
+                                    statusCode: __response.StatusCode)
+                                {
+                                    ResponseBody = __content_default,
+                                    ResponseObject = __value_default,
+                                    ResponseHeaders = global::System.Linq.Enumerable.ToDictionary(
+                                        __response.Headers,
+                                        h => h.Key,
+                                        h => h.Value),
+                                };
+                            }
+
+                            if (__effectiveReadResponseAsString)
+                            {
+                                var __content = await __response.Content.ReadAsStringAsync(
+                #if NET5_0_OR_GREATER
+                                    __effectiveCancellationToken
+                #endif
+                                ).ConfigureAwait(false);
+
+                                ProcessResponseContent(
+                                    client: HttpClient,
+                                    response: __response,
+                                    content: ref __content);
+                                ProcessOpenaiChatCompletionResponseContent(
+                                    httpClient: HttpClient,
+                                    httpResponseMessage: __response,
+                                    content: ref __content);
+
+                                try
+                                {
+                                    __response.EnsureSuccessStatusCode();
+
+                                    return
+                                        global::Guardrails.OpenAIChatCompletion.FromJson(__content, JsonSerializerContext) ??
+                                        throw new global::System.InvalidOperationException($"Response deserialization failed for \"{__content}\" ");
+                                }
+                                catch (global::System.Exception __ex)
+                                {
+                                    throw new global::Guardrails.ApiException(
+                                        message: __content ?? __response.ReasonPhrase ?? string.Empty,
+                                        innerException: __ex,
+                                        statusCode: __response.StatusCode)
+                                    {
+                                        ResponseBody = __content,
+                                        ResponseHeaders = global::System.Linq.Enumerable.ToDictionary(
+                                            __response.Headers,
+                                            h => h.Key,
+                                            h => h.Value),
+                                    };
+                                }
+                            }
+                            else
+                            {
+                                try
+                                {
+                                    __response.EnsureSuccessStatusCode();
+                                    using var __content = await __response.Content.ReadAsStreamAsync(
+                #if NET5_0_OR_GREATER
+                                        __effectiveCancellationToken
+                #endif
+                                    ).ConfigureAwait(false);
+
+                                    return
+                                        await global::Guardrails.OpenAIChatCompletion.FromJsonStreamAsync(__content, JsonSerializerContext).ConfigureAwait(false) ??
+                                        throw new global::System.InvalidOperationException("Response deserialization failed.");
+                                }
+                                catch (global::System.Exception __ex)
+                                {
+                                    string? __content = null;
+                                    try
+                                    {
+                                        __content = await __response.Content.ReadAsStringAsync(
+                #if NET5_0_OR_GREATER
+                                            __effectiveCancellationToken
+                #endif
+                                        ).ConfigureAwait(false);
+                                    }
+                                    catch (global::System.Exception)
+                                    {
+                                    }
+
+                                    throw new global::Guardrails.ApiException(
+                                        message: __content ?? __response.ReasonPhrase ?? string.Empty,
+                                        innerException: __ex,
+                                        statusCode: __response.StatusCode)
+                                    {
+                                        ResponseBody = __content,
+                                        ResponseHeaders = global::System.Linq.Enumerable.ToDictionary(
+                                            __response.Headers,
+                                            h => h.Key,
+                                            h => h.Value),
+                                    };
+                                }
+                            }
+
+                }
+            }
+            finally
+            {
+                __httpRequest?.Dispose();
             }
         }
         /// <summary>
@@ -264,6 +447,7 @@ namespace Guardrails
         /// <param name="temperature">
         /// The sampling temperature
         /// </param>
+        /// <param name="requestOptions">Per-request overrides such as headers, query parameters, timeout, retries, and response buffering.</param>
         /// <param name="cancellationToken">The token to cancel the operation with</param>
         /// <exception cref="global::System.InvalidOperationException"></exception>
         public async global::System.Threading.Tasks.Task<global::Guardrails.OpenAIChatCompletion> OpenaiChatCompletionAsync(
@@ -272,6 +456,7 @@ namespace Guardrails
             global::System.Collections.Generic.IList<global::Guardrails.OpenAIChatMessage>? messages = default,
             int? maxTokens = default,
             double? temperature = default,
+            global::Guardrails.AutoSDKRequestOptions? requestOptions = default,
             global::System.Threading.CancellationToken cancellationToken = default)
         {
             var __request = new global::Guardrails.OpenAIChatCompletionPayload
@@ -285,6 +470,7 @@ namespace Guardrails
             return await OpenaiChatCompletionAsync(
                 guardName: guardName,
                 request: __request,
+                requestOptions: requestOptions,
                 cancellationToken: cancellationToken).ConfigureAwait(false);
         }
     }
