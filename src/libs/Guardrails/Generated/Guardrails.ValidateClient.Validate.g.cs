@@ -127,10 +127,10 @@ namespace Guardrails
                 } 
             }
 
-                if (xOpenaiApiKey != default)
-                {
-                    __httpRequest.Headers.TryAddWithoutValidation("x-openai-api-key", xOpenaiApiKey.ToString());
-                }
+            if (xOpenaiApiKey != default)
+            {
+                __httpRequest.Headers.TryAddWithoutValidation("x-openai-api-key", xOpenaiApiKey.ToString());
+            }
 
                             var __httpRequestContentBody = request.ToJson(JsonSerializerContext);
                             var __httpRequestContent = new global::System.Net.Http.StringContent(
