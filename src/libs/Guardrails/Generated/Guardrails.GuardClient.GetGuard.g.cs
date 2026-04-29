@@ -132,7 +132,7 @@ namespace Guardrails
                 PrepareGetGuardRequest(
                     httpClient: HttpClient,
                     httpRequestMessage: __httpRequest,
-                    guardName: guardName,
+                    guardName: guardName!,
                     asOf: asOf);
 
                 return __httpRequest;

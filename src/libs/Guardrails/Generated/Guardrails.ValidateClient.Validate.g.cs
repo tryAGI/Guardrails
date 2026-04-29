@@ -149,7 +149,7 @@ namespace Guardrails
                 PrepareValidateRequest(
                     httpClient: HttpClient,
                     httpRequestMessage: __httpRequest,
-                    guardName: guardName,
+                    guardName: guardName!,
                     xOpenaiApiKey: xOpenaiApiKey,
                     request: request);
 

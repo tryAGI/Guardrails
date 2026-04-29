@@ -129,8 +129,8 @@ namespace Guardrails
                 PrepareGetGuardHistoryRequest(
                     httpClient: HttpClient,
                     httpRequestMessage: __httpRequest,
-                    guardName: guardName,
-                    callId: callId);
+                    guardName: guardName!,
+                    callId: callId!);
 
                 return __httpRequest;
             }

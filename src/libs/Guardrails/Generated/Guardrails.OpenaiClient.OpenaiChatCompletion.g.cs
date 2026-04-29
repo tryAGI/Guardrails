@@ -138,7 +138,7 @@ namespace Guardrails
                 PrepareOpenaiChatCompletionRequest(
                     httpClient: HttpClient,
                     httpRequestMessage: __httpRequest,
-                    guardName: guardName,
+                    guardName: guardName!,
                     request: request);
 
                 return __httpRequest;
