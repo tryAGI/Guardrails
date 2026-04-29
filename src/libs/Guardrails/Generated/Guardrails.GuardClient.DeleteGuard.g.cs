@@ -124,7 +124,7 @@ namespace Guardrails
                 PrepareDeleteGuardRequest(
                     httpClient: HttpClient,
                     httpRequestMessage: __httpRequest,
-                    guardName: guardName);
+                    guardName: guardName!);
 
                 return __httpRequest;
             }
