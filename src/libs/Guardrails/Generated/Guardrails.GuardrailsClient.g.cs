@@ -43,7 +43,7 @@ namespace Guardrails
         /// <summary>
         /// 
         /// </summary>
-        public GuardClient Guard => new GuardClient(HttpClient, authorizations: Authorizations, options: Options)
+        public GuardClient Guard => new GuardClient(HttpClient, baseUri: null, authorizations: Authorizations, options: Options)
         {
             ReadResponseAsString = ReadResponseAsString,
             JsonSerializerContext = JsonSerializerContext,
@@ -52,7 +52,7 @@ namespace Guardrails
         /// <summary>
         /// 
         /// </summary>
-        public OpenaiClient Openai => new OpenaiClient(HttpClient, authorizations: Authorizations, options: Options)
+        public OpenaiClient Openai => new OpenaiClient(HttpClient, baseUri: null, authorizations: Authorizations, options: Options)
         {
             ReadResponseAsString = ReadResponseAsString,
             JsonSerializerContext = JsonSerializerContext,
@@ -61,7 +61,7 @@ namespace Guardrails
         /// <summary>
         /// 
         /// </summary>
-        public ServiceHealthClient ServiceHealth => new ServiceHealthClient(HttpClient, authorizations: Authorizations, options: Options)
+        public ServiceHealthClient ServiceHealth => new ServiceHealthClient(HttpClient, baseUri: null, authorizations: Authorizations, options: Options)
         {
             ReadResponseAsString = ReadResponseAsString,
             JsonSerializerContext = JsonSerializerContext,
@@ -70,7 +70,7 @@ namespace Guardrails
         /// <summary>
         /// 
         /// </summary>
-        public ValidateClient Validate => new ValidateClient(HttpClient, authorizations: Authorizations, options: Options)
+        public ValidateClient Validate => new ValidateClient(HttpClient, baseUri: null, authorizations: Authorizations, options: Options)
         {
             ReadResponseAsString = ReadResponseAsString,
             JsonSerializerContext = JsonSerializerContext,
@@ -109,10 +109,10 @@ namespace Guardrails
         /// <param name="options">Client-wide request defaults such as headers, query parameters, retries, and timeout.</param>
         /// <param name="disposeHttpClient">Dispose the HttpClient when the instance is disposed. True by default.</param>
         public GuardrailsClient(
-            global::System.Net.Http.HttpClient? httpClient = null,
-            global::System.Uri? baseUri = null,
-            global::System.Collections.Generic.List<global::Guardrails.EndPointAuthorization>? authorizations = null,
-            global::Guardrails.AutoSDKClientOptions? options = null,
+            global::System.Net.Http.HttpClient? httpClient,
+            global::System.Uri? baseUri,
+            global::System.Collections.Generic.List<global::Guardrails.EndPointAuthorization>? authorizations,
+            global::Guardrails.AutoSDKClientOptions? options,
             bool disposeHttpClient = true)
         {
 

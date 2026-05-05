@@ -22,6 +22,20 @@ namespace Guardrails
         /// OpenAI SDK compatible endpoint for Chat Completions
         /// </summary>
         /// <param name="guardName"></param>
+        /// <param name="request"></param>
+        /// <param name="requestOptions">Per-request overrides such as headers, query parameters, timeout, retries, and response buffering.</param>
+        /// <param name="cancellationToken">The token to cancel the operation with</param>
+        /// <exception cref="global::Guardrails.ApiException"></exception>
+        global::System.Threading.Tasks.Task<global::Guardrails.AutoSDKHttpResponse<global::Guardrails.OpenAIChatCompletion>> OpenaiChatCompletionAsResponseAsync(
+            string guardName,
+
+            global::Guardrails.OpenAIChatCompletionPayload request,
+            global::Guardrails.AutoSDKRequestOptions? requestOptions = default,
+            global::System.Threading.CancellationToken cancellationToken = default);
+        /// <summary>
+        /// OpenAI SDK compatible endpoint for Chat Completions
+        /// </summary>
+        /// <param name="guardName"></param>
         /// <param name="model">
         /// The model to use for the completion<br/>
         /// Example: gpt-3.5-turbo
