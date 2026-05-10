@@ -66,5 +66,6 @@ namespace Guardrails
         public ErrorSpan()
         {
         }
+
     }
 }

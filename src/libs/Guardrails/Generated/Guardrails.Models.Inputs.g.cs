@@ -118,5 +118,6 @@ namespace Guardrails
         public Inputs()
         {
         }
+
     }
 }

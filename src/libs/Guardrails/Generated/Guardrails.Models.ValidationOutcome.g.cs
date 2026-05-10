@@ -106,5 +106,6 @@ namespace Guardrails
         public ValidationOutcome()
         {
         }
+
     }
 }
