@@ -52,5 +52,6 @@ namespace Guardrails
         public OpenAIChatMessage()
         {
         }
+
     }
 }

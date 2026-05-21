@@ -62,6 +62,34 @@ namespace Guardrails
             global::Guardrails.AutoSDKRequestOptions? requestOptions = default,
             global::System.Threading.CancellationToken cancellationToken = default)
         {
+            var __response = await ValidateAsResponseAsync(
+                guardName: guardName,
+
+                request: request,
+                xOpenaiApiKey: xOpenaiApiKey,
+                requestOptions: requestOptions,
+                cancellationToken: cancellationToken
+            ).ConfigureAwait(false);
+
+            return __response.Body;
+        }
+        /// <summary>
+        /// Runs the validations specified in a Guard
+        /// </summary>
+        /// <param name="guardName"></param>
+        /// <param name="xOpenaiApiKey"></param>
+        /// <param name="request"></param>
+        /// <param name="requestOptions">Per-request overrides such as headers, query parameters, timeout, retries, and response buffering.</param>
+        /// <param name="cancellationToken">The token to cancel the operation with</param>
+        /// <exception cref="global::Guardrails.ApiException"></exception>
+        public async global::System.Threading.Tasks.Task<global::Guardrails.AutoSDKHttpResponse<global::Guardrails.ValidationOutcome>> ValidateAsResponseAsync(
+            string guardName,
+
+            global::Guardrails.ValidatePayload request,
+            string? xOpenaiApiKey = default,
+            global::Guardrails.AutoSDKRequestOptions? requestOptions = default,
+            global::System.Threading.CancellationToken cancellationToken = default)
+        {
             request = request ?? throw new global::System.ArgumentNullException(nameof(request));
 
             PrepareArguments(
@@ -94,6 +122,7 @@ namespace Guardrails
 
             global::System.Net.Http.HttpRequestMessage __CreateHttpRequest()
             {
+
                             var __pathBuilder = new global::Guardrails.PathBuilder(
                                 path: $"/guards/{guardName}/validate",
                                 baseUri: HttpClient.BaseAddress);
@@ -181,6 +210,8 @@ namespace Guardrails
                                 attempt: __attempt,
                                 maxAttempts: __maxAttempts,
                                 willRetry: false,
+                                retryDelay: null,
+                                retryReason: global::System.String.Empty,
                                 cancellationToken: __effectiveCancellationToken)).ConfigureAwait(false);
                     try
                     {
@@ -191,6 +222,11 @@ namespace Guardrails
                     }
                     catch (global::System.Net.Http.HttpRequestException __exception)
                     {
+                        var __retryDelay = global::Guardrails.AutoSDKRequestOptionsSupport.GetRetryDelay(
+                            clientOptions: Options,
+                            requestOptions: requestOptions,
+                            response: null,
+                            attempt: __attempt);
                         var __willRetry = __attempt < __maxAttempts && !__effectiveCancellationToken.IsCancellationRequested;
                         await global::Guardrails.AutoSDKRequestOptionsSupport.OnAfterErrorAsync(
                             clientOptions: Options,
@@ -208,6 +244,8 @@ namespace Guardrails
                                 attempt: __attempt,
                                 maxAttempts: __maxAttempts,
                                 willRetry: __willRetry,
+                                retryDelay: __willRetry ? __retryDelay : (global::System.TimeSpan?)null,
+                                retryReason: "exception",
                                 cancellationToken: __effectiveCancellationToken)).ConfigureAwait(false);
                         if (!__willRetry)
                         {
@@ -217,8 +255,7 @@ namespace Guardrails
                         __httpRequest.Dispose();
                         __httpRequest = null;
                         await global::Guardrails.AutoSDKRequestOptionsSupport.DelayBeforeRetryAsync(
-                            clientOptions: Options,
-                            requestOptions: requestOptions,
+                            retryDelay: __retryDelay,
                             cancellationToken: __effectiveCancellationToken).ConfigureAwait(false);
                         continue;
                     }
@@ -227,6 +264,11 @@ namespace Guardrails
                         __attempt < __maxAttempts &&
                         global::Guardrails.AutoSDKRequestOptionsSupport.ShouldRetryStatusCode(__response.StatusCode))
                     {
+                        var __retryDelay = global::Guardrails.AutoSDKRequestOptionsSupport.GetRetryDelay(
+                            clientOptions: Options,
+                            requestOptions: requestOptions,
+                            response: __response,
+                            attempt: __attempt);
                         await global::Guardrails.AutoSDKRequestOptionsSupport.OnAfterErrorAsync(
                             clientOptions: Options,
                             context: global::Guardrails.AutoSDKRequestOptionsSupport.CreateHookContext(
@@ -243,14 +285,15 @@ namespace Guardrails
                                 attempt: __attempt,
                                 maxAttempts: __maxAttempts,
                                 willRetry: true,
+                                retryDelay: __retryDelay,
+                                retryReason: "status:" + ((int)__response.StatusCode).ToString(global::System.Globalization.CultureInfo.InvariantCulture),
                                 cancellationToken: __effectiveCancellationToken)).ConfigureAwait(false);
                         __response.Dispose();
                         __response = null;
                         __httpRequest.Dispose();
                         __httpRequest = null;
                         await global::Guardrails.AutoSDKRequestOptionsSupport.DelayBeforeRetryAsync(
-                            clientOptions: Options,
-                            requestOptions: requestOptions,
+                            retryDelay: __retryDelay,
                             cancellationToken: __effectiveCancellationToken).ConfigureAwait(false);
                         continue;
                     }
@@ -290,6 +333,8 @@ namespace Guardrails
                                 attempt: __attemptNumber,
                                 maxAttempts: __maxAttempts,
                                 willRetry: false,
+                                retryDelay: null,
+                                retryReason: global::System.String.Empty,
                                 cancellationToken: __effectiveCancellationToken)).ConfigureAwait(false);
                 }
                 else
@@ -310,6 +355,8 @@ namespace Guardrails
                                 attempt: __attemptNumber,
                                 maxAttempts: __maxAttempts,
                                 willRetry: false,
+                                retryDelay: null,
+                                retryReason: global::System.String.Empty,
                                 cancellationToken: __effectiveCancellationToken)).ConfigureAwait(false);
                 }
                             // Unexpected error
@@ -372,9 +419,13 @@ namespace Guardrails
                                 {
                                     __response.EnsureSuccessStatusCode();
 
-                                    return
-                                        global::Guardrails.ValidationOutcome.FromJson(__content, JsonSerializerContext) ??
+                                    var __value = global::Guardrails.ValidationOutcome.FromJson(__content, JsonSerializerContext) ??
                                         throw new global::System.InvalidOperationException($"Response deserialization failed for \"{__content}\" ");
+                                    return new global::Guardrails.AutoSDKHttpResponse<global::Guardrails.ValidationOutcome>(
+                                        statusCode: __response.StatusCode,
+                                        headers: global::Guardrails.AutoSDKHttpResponse.CreateHeaders(__response),
+                                        requestUri: __response.RequestMessage?.RequestUri,
+                                        body: __value);
                                 }
                                 catch (global::System.Exception __ex)
                                 {
@@ -402,9 +453,13 @@ namespace Guardrails
                 #endif
                                     ).ConfigureAwait(false);
 
-                                    return
-                                        await global::Guardrails.ValidationOutcome.FromJsonStreamAsync(__content, JsonSerializerContext).ConfigureAwait(false) ??
+                                    var __value = await global::Guardrails.ValidationOutcome.FromJsonStreamAsync(__content, JsonSerializerContext).ConfigureAwait(false) ??
                                         throw new global::System.InvalidOperationException("Response deserialization failed.");
+                                    return new global::Guardrails.AutoSDKHttpResponse<global::Guardrails.ValidationOutcome>(
+                                        statusCode: __response.StatusCode,
+                                        headers: global::Guardrails.AutoSDKHttpResponse.CreateHeaders(__response),
+                                        requestUri: __response.RequestMessage?.RequestUri,
+                                        body: __value);
                                 }
                                 catch (global::System.Exception __ex)
                                 {
