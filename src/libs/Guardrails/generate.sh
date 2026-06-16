@@ -1,11 +1,22 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# OpenAPI spec: https://raw.githubusercontent.com/guardrails-ai/guardrails-api-client/main/service-specs/guardrails-service-spec.yml
+install_autosdk_cli() {
+  dotnet tool update --global autosdk.cli --prerelease >/dev/null 2>&1 || \
+    dotnet tool install --global autosdk.cli --prerelease
+}
 
-dotnet tool install --global autosdk.cli --prerelease
+fetch_spec() {
+  curl "$@" \
+    --fail --silent --show-error --location \
+    --retry 5 --retry-delay 10 --retry-all-errors \
+    --connect-timeout 30 --max-time 300
+}
+
+# OpenAPI spec: https://raw.githubusercontent.com/guardrails-ai/guardrails-api-client/main/service-specs/guardrails-service-spec.yml
+install_autosdk_cli
 rm -rf Generated
-curl --fail --silent --show-error -L -o openapi.yaml https://raw.githubusercontent.com/guardrails-ai/guardrails-api-client/main/service-specs/guardrails-service-spec.yml
+fetch_spec --fail --silent --show-error -L -o openapi.yaml https://raw.githubusercontent.com/guardrails-ai/guardrails-api-client/main/service-specs/guardrails-service-spec.yml
 
 # The upstream spec has external $ref links to guardrails-ai/interfaces JSON schemas
 # and uses apiKey auth. We create a self-contained spec with all schemas inlined,
