@@ -22,7 +22,7 @@ namespace Guardrails
         public string? RawLlmOutput { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("validationSummaries")]
         public global::System.Collections.Generic.IList<global::Guardrails.ValidationSummary>? ValidationSummaries { get; set; }

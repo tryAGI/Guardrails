@@ -39,13 +39,13 @@ namespace Guardrails
         public string? GuardedOutput { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("reasks")]
         public global::System.Collections.Generic.IList<global::Guardrails.Reask>? Reasks { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("validatorLogs")]
         public global::System.Collections.Generic.IList<global::Guardrails.ValidatorLog>? ValidatorLogs { get; set; }

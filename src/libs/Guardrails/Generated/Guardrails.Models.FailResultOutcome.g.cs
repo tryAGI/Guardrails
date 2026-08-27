@@ -9,7 +9,7 @@ namespace Guardrails
     public enum FailResultOutcome
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Fail,
     }

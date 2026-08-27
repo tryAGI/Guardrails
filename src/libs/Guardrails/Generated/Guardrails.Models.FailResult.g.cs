@@ -29,7 +29,7 @@ namespace Guardrails
         public string? FixValue { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("errorSpans")]
         public global::System.Collections.Generic.IList<global::Guardrails.ErrorSpan>? ErrorSpans { get; set; }

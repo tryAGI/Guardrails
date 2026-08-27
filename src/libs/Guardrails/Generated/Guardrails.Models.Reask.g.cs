@@ -15,7 +15,7 @@ namespace Guardrails
         public string? IncorrectValue { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("failResults")]
         public global::System.Collections.Generic.IList<global::Guardrails.FailResult>? FailResults { get; set; }

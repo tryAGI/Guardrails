@@ -40,28 +40,28 @@ namespace Guardrails
 
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         global::System.Text.Json.Serialization.JsonSerializerContext JsonSerializerContext { get; set; }
 
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public GuardClient Guard { get; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public OpenaiClient Openai { get; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public ServiceHealthClient ServiceHealth { get; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public ValidateClient Validate { get; }
 
