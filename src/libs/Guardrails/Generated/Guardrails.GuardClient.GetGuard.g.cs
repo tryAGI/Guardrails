@@ -143,7 +143,7 @@ namespace Guardrails
                          __authorization.Location == "Header")
                 {
                     __httpRequest.Headers.Add(__authorization.Name, __authorization.Value);
-                } 
+                }
             }
                 global::Guardrails.AutoSDKRequestOptionsSupport.ApplyHeaders(
                     request: __httpRequest,

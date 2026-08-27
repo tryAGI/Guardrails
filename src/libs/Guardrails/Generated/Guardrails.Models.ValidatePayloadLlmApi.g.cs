@@ -9,35 +9,35 @@ namespace Guardrails
     public enum ValidatePayloadLlmApi
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         LitellmAcompletion,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         LitellmCompletion,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         OpenaiChatCompletionAcreate,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         OpenaiChatCompletionCreate,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         OpenaiCompletionAcreate,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         OpenaiCompletionCreate,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         OpenaiChatCompletionsCreate,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         OpenaiCompletionsCreate,
     }

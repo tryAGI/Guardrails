@@ -9,11 +9,11 @@ namespace Guardrails
     public enum ValidationSummaryValidatorStatus
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Fail,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Pass,
     }

@@ -4,7 +4,7 @@
 namespace Guardrails
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public sealed partial class CallInputsMetadata2
     {

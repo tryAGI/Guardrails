@@ -29,7 +29,7 @@ namespace Guardrails
         public string? Description { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("validators")]
         public global::System.Collections.Generic.IList<global::Guardrails.ValidatorReference>? Validators { get; set; }

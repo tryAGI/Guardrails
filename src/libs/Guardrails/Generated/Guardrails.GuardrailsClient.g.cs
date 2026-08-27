@@ -38,7 +38,7 @@ namespace Guardrails
         internal global::System.Lazy<global::System.Text.Json.Serialization.JsonSerializerContext> JsonSerializerContextProvider { get; set; } = new(() => global::Guardrails.SourceGenerationContext.Default);
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public global::System.Text.Json.Serialization.JsonSerializerContext JsonSerializerContext
         {
@@ -48,7 +48,7 @@ namespace Guardrails
 
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public GuardClient Guard => new GuardClient(HttpClient, baseUri: null, authorizations: Authorizations, options: Options)
         {
@@ -57,7 +57,7 @@ namespace Guardrails
         };
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public OpenaiClient Openai => new OpenaiClient(HttpClient, baseUri: null, authorizations: Authorizations, options: Options)
         {
@@ -66,7 +66,7 @@ namespace Guardrails
         };
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public ServiceHealthClient ServiceHealth => new ServiceHealthClient(HttpClient, baseUri: null, authorizations: Authorizations, options: Options)
         {
@@ -75,7 +75,7 @@ namespace Guardrails
         };
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public ValidateClient Validate => new ValidateClient(HttpClient, baseUri: null, authorizations: Authorizations, options: Options)
         {

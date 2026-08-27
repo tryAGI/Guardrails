@@ -20,7 +20,7 @@ namespace Guardrails.JsonConverters
                     {
                         return global::Guardrails.ValidatorReferenceOnFailExtensions.ToEnum(stringValue);
                     }
-                    
+
                     break;
                 }
                 case global::System.Text.Json.JsonTokenType.Number:

@@ -10,35 +10,35 @@ namespace Guardrails
     public enum ValidatorReferenceOnFail
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Custom,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Exception,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Filter,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Fix,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         FixReask,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Noop,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Reask,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Refrain,
     }
